@@ -223,11 +223,42 @@
         </script>
 
         <script type='text/babel'>
+            const List = (props) => {
+                return (
+                    <ul>
+                        LIST
+                    </ul>
+                )
+            }
+
+            class Todos extends React.Component {
+                render() {
+                    return (
+                        <div>
+                            TODOS
+                            <List />    
+                        </div>
+                    )
+                }
+            }
+
+            class Goals extends React.Component {
+                render() {
+                    return (
+                        <div>
+                            GOALS
+                            <List />    
+                        </div>
+                    )
+                }
+            }
+
             class App extends React.Component {
                 render () {
                     return (
                         <div>
-                            APP
+                            <Todos />
+                            <Goals />
                         </div>
                     )
                 }
