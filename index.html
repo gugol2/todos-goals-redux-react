@@ -236,11 +236,11 @@
                 addItem = (event) => {
                     event.preventDefault();
 
-                    const value = this.input.value;
+                    const name = this.input.value;
                     this.input.value = '';
 
                     this.props.store.dispatch(addTodoAction({
-                        name: value,
+                        name,
                         complete: false,
                         id: generateId()
                     }));
@@ -268,11 +268,11 @@
                 addItem = (event) => {
                     event.preventDefault();
 
-                    const value = this.input.value;
+                    const name = this.input.value;
                     this.input.value = '';
 
                     this.props.store.dispatch(addGoalAction({
-                        name: value,
+                        name,
                         id: generateId()
                     }));
                 } 
