@@ -237,9 +237,9 @@
                     event.preventDefault();
 
                     const value = this.input.value;
-                    this.input = '';
+                    this.input.value = '';
 
-                    store.dispatch(addTodoAction({
+                    this.props.store.dispatch(addTodoAction({
                         name: value,
                         complete: false,
                         id: generateId()
@@ -269,9 +269,9 @@
                     event.preventDefault();
 
                     const value = this.input.value;
-                    this.input = '';
+                    this.input.value = '';
 
-                    store.dispatch(addGoalAction({
+                    this.props.store.dispatch(addGoalAction({
                         name: value,
                         id: generateId()
                     }));
@@ -299,15 +299,15 @@
                 render () {
                     return (
                         <div>
-                            <Todos />
-                            <Goals />
+                            <Todos store={this.props.store} />
+                            <Goals store={this.props.store} />
                         </div>
                     )
                 }
             }
 
             ReactDOM.render(
-                <App />,
+                <App store={store}/>,
                 document.getElementById('app')
             )
         </script>
