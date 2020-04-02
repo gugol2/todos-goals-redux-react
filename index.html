@@ -222,6 +222,7 @@
             document.getElementById('goalBtn').addEventListener('click', addGoal);
         </script>
 
+        <!-- This way babel will transpile de JSX into plain JS -->
         <script type='text/babel'>
             const List = (props) => {
                 return (
@@ -232,10 +233,31 @@
             }
 
             class Todos extends React.Component {
+                addItem = (event) => {
+                    event.preventDefault();
+
+                    const value = this.input.value;
+                    this.input = '';
+
+                    store.dispatch(addTodoAction({
+                        name: value,
+                        complete: false,
+                        id: generateId()
+                    }));
+                } 
+
                 render() {
                     return (
                         <div>
-                            TODOS
+                            <h1>Todo List</h1>
+
+                            <input 
+                                type="text" 
+                                placeholder="Add Todo" 
+                                ref = {(input) => this.input = input}
+                            />
+
+                            <button onClick={this.addItem}>Add Todo</button>
                             <List />    
                         </div>
                     )
@@ -243,10 +265,30 @@
             }
 
             class Goals extends React.Component {
+                addItem = (event) => {
+                    event.preventDefault();
+
+                    const value = this.input.value;
+                    this.input = '';
+
+                    store.dispatch(addGoalAction({
+                        name: value,
+                        id: generateId()
+                    }));
+                } 
+
                 render() {
                     return (
                         <div>
-                            GOALS
+                            <h1>Goal List</h1>
+
+                            <input 
+                                type="text" 
+                                placeholder="Add Goal" 
+                                ref = {(input) => this.input = input}
+                            />
+
+                            <button onClick={this.addItem}>Add Goal</button>
                             <List />    
                         </div>
                     )
