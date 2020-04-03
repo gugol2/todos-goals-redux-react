@@ -42,6 +42,17 @@
                 }
             }
 
+            const handleDeleteTodo = (todo) => {
+                return (dispatch) => {
+                    dispatch(removeTodoAction(todo.id));
+                        
+                    return API.deleteTodo(todo.id).catch(() => {
+                        alert(`Removal of todo: ${todo.name} failed. Try again!!`);
+                        dispatch(addTodoAction(todo));
+                    });
+                }
+            }
+
             function toggleTodoAction (id) {
                 return {
                     type: TOGGLE_TODO,
@@ -111,6 +122,14 @@
             }
 
             // MIDDLEWARE
+            const thunk = (store) => (next) => (action) => {
+                if(typeof action === 'function') {
+                    return action(store.dispatch);
+                } else {
+                    return next(action);
+                }
+            };
+
             const display = (store) => (next) => (action) => {
                 if(action.type === ADD_TODO) {
                     alert(`Don't forget to ${action.todo.name}!`);
@@ -151,7 +170,7 @@
                 todos,
                 goals,
                 loading
-            }), Redux.applyMiddleware(checker, display, logger));
+            }), Redux.applyMiddleware(thunk, checker, display, logger));
 
         </script>
 
@@ -184,12 +203,7 @@
                 } 
 
                 removeItem = (todo) => {
-                    this.props.store.dispatch(removeTodoAction(todo.id));
-                    
-                    return API.deleteTodo(todo.id).catch(() => {
-                        alert(`Removal of todo: ${todo.name} failed. Try again!!`);
-                        this.props.store.dispatch(addTodoAction(todo));
-                    });
+                    this.props.store.dispatch(handleDeleteTodo(todo));
                 }
 
                 toggleItem = (id) => {
