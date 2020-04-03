@@ -232,8 +232,17 @@
             class App extends React.Component {
                 componentDidMount () {
                     const { store } = this.props;
+                    const { todos, goals } = store.getState();
 
                     store.subscribe(() => this.forceUpdate());
+
+                    const todosPromise = API.fetchTodos();
+                    const goalsPromise = API.fetchGoals();
+
+                    Promise.all([todosPromise, goalsPromise]).then(([todos, goals]) => {
+                        console.log('todos', todos);
+                        console.log('goals', goals);
+                    });
                 }
 
                 render () {
