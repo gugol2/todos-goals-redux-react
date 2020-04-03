@@ -147,6 +147,7 @@
             const List = (props) => {
                 return (
                     <ul>
+                        {props.loading && (<span>Loading...</span>)}
                         {props.items.map(item => (
                             <li key={item.id}>
                                 <span
@@ -198,6 +199,7 @@
                                 items={this.props.todos}
                                 remove={this.removeItem}
                                 toggle={this.toggleItem}
+                                loading={this.props.loading}
                             />    
                         </div>
                     )
@@ -236,6 +238,7 @@
                             <List 
                                 items={this.props.goals} 
                                 remove={this.removeItem}
+                                loading={this.props.loading}
                             />    
                         </div>
                     )
@@ -243,6 +246,11 @@
             }
 
             class App extends React.Component {
+                constructor (props) {
+                    super(props);
+                    this.loading = true;
+                }
+
                 componentDidMount () {
                     const { store } = this.props;
                     const { todos, goals } = store.getState();
@@ -253,6 +261,7 @@
                     const goalsPromise = API.fetchGoals();
 
                     Promise.all([todosPromise, goalsPromise]).then(([todos, goals]) => {
+                        this.loading = false;
                         store.dispatch(receiveDataAction(todos, goals));
                     });
                 }
@@ -263,8 +272,8 @@
                     
                     return (
                         <div>
-                            <Todos todos={todos} store={this.props.store} />
-                            <Goals goals={goals} store={this.props.store} />
+                            <Todos todos={todos} store={this.props.store} loading={this.loading} />
+                            <Goals goals={goals} store={this.props.store} loading={this.loading} />
                         </div>
                     )
                 }
