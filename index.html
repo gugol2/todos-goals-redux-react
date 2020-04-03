@@ -188,15 +188,16 @@
                 } 
 
                 removeItem = (todo) => {
-                    API.deleteTodo(todo.id).then(() => {
-                        this.props.store.dispatch(removeTodoAction(todo.id));
-                    }).catch( () => {
-                        console.log(`Removal of todo:${todo.name} failed!!`);
+                    this.props.store.dispatch(removeTodoAction(todo.id));
+                    
+                    API.deleteTodo(todo.id).catch(() => {
+                        alert(`Removal of todo: ${todo.name} failed. Try again!!`);
+                        this.props.store.dispatch(addTodoAction(todo));
                     });
                 }
 
                 toggleItem = (id) => {
-                    this.props.store.dispatch(toggleTodoAction(id))
+                    this.props.store.dispatch(toggleTodoAction(id));
                 }
 
                 render() {
@@ -235,7 +236,12 @@
                 } 
 
                 removeItem = (goal) => {
-                    this.props.store.dispatch(removeGoalAction(goal.id))
+                    this.props.store.dispatch(removeGoalAction(goal.id));
+
+                    API.deleteTodo(goal.id).catch(() => {
+                        alert(`Removal of goal: ${goal.name} failed. Try again!!`);
+                        this.props.store.dispatch(addGoalAction(goal));
+                    });
                 }
 
                 render() {
