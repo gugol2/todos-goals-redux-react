@@ -198,6 +198,11 @@
 
                 toggleItem = (id) => {
                     this.props.store.dispatch(toggleTodoAction(id));
+
+                    API.saveTodoToggle(id).then(() => {
+                        alert(`Toggling of todo failed. Try again!!`);
+                        this.props.store.dispatch(toggleTodoAction(id));
+                    });
                 }
 
                 render() {
