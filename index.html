@@ -74,6 +74,17 @@
                 }
             }
 
+            const handleDeleteGoal = (goal) => {
+                return (dispatch) => {
+                    dispatch(removeGoalAction(goal.id));
+    
+                    return API.deleteTodo(goal.id).catch(() => {
+                        alert(`Removal of goal: ${goal.name} failed. Try again!!`);
+                        dispatch(addGoalAction(goal));
+                    });
+                };
+            }
+
             const receiveDataAction = (todos, goals) => {
                 return {
                     type: RECEIVE_DATA,
@@ -250,12 +261,7 @@
                 } 
 
                 removeItem = (goal) => {
-                    this.props.store.dispatch(removeGoalAction(goal.id));
-
-                    return API.deleteTodo(goal.id).catch(() => {
-                        alert(`Removal of goal: ${goal.name} failed. Try again!!`);
-                        this.props.store.dispatch(addGoalAction(goal));
-                    });
+                    this.props.store.dispatch(handleDeleteGoal(goal));
                 }
 
                 render() {
