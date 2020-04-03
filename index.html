@@ -9,6 +9,7 @@
         <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
         <!-- Remote API as DB -->
         <script src="https://tylermcginnis.com/goals-todos-api/index.js"></script>
+        <script src="https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js"></script>
     </head>
     <body>
         <div id="app"></div>
@@ -133,14 +134,6 @@
             }
 
             // MIDDLEWARE
-            const thunk = (store) => (next) => (action) => {
-                if(typeof action === 'function') {
-                    return action(store.dispatch);
-                } else {
-                    return next(action);
-                }
-            };
-
             const display = (store) => (next) => (action) => {
                 if(action.type === ADD_TODO) {
                     alert(`Don't forget to ${action.todo.name}!`);
@@ -181,7 +174,7 @@
                 todos,
                 goals,
                 loading
-            }), Redux.applyMiddleware(thunk, checker, display, logger));
+            }), Redux.applyMiddleware(ReduxThunk.default, checker, display, logger));
 
         </script>
 
