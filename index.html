@@ -190,18 +190,18 @@
                 removeItem = (todo) => {
                     this.props.store.dispatch(removeTodoAction(todo.id));
                     
-                    API.deleteTodo(todo.id).catch(() => {
-                        alert(`Removal of todo: ${todo.name} failed. Try again!!`);
+                    return API.deleteTodo(todo.id).catch(() => {
                         this.props.store.dispatch(addTodoAction(todo));
+                        alert(`Removal of todo: ${todo.name} failed. Try again!!`);
                     });
                 }
 
                 toggleItem = (id) => {
                     this.props.store.dispatch(toggleTodoAction(id));
 
-                    API.saveTodoToggle(id).then(() => {
-                        alert(`Toggling of todo failed. Try again!!`);
+                    return API.saveTodoToggle(id).then(() => {
                         this.props.store.dispatch(toggleTodoAction(id));
+                        alert(`Toggling of todo failed. Try again!!`);
                     });
                 }
 
@@ -243,9 +243,9 @@
                 removeItem = (goal) => {
                     this.props.store.dispatch(removeGoalAction(goal.id));
 
-                    API.deleteTodo(goal.id).catch(() => {
-                        alert(`Removal of goal: ${goal.name} failed. Try again!!`);
+                    return API.deleteTodo(goal.id).catch(() => {
                         this.props.store.dispatch(addGoalAction(goal));
+                        alert(`Removal of goal: ${goal.name} failed. Try again!!`);
                     });
                 }
 
