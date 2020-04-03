@@ -190,7 +190,9 @@
                 removeItem = (todo) => {
                     API.deleteTodo(todo.id).then(() => {
                         this.props.store.dispatch(removeTodoAction(todo.id));
-                    })
+                    }).catch( () => {
+                        console.log(`Removal of todo:${todo.name} failed!!`);
+                    });
                 }
 
                 toggleItem = (id) => {
