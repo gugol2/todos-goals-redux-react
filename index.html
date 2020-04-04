@@ -68,6 +68,17 @@
                 }
             }
 
+            const handleAddGoal = (name, cb) => {
+                return (dispatch) => {
+                    return API.saveGoal(name).then(goal => {
+                        dispatch(addGoalAction(goal));
+                        cb();
+                    }).catch(() => {
+                        alert('Sorry there was an error. Try again!');
+                    });
+                }
+            }
+
             function removeGoalAction (id) {
                 return {
                     type: REMOVE_GOAL,
@@ -245,12 +256,10 @@
                 addItem = (event) => {
                     event.preventDefault();
 
-                    API.saveGoal(this.input.value).then(goal => {
-                        this.props.store.dispatch(addGoalAction(goal));
-                        this.input.value = '';
-                    }).catch(() => {
-                        alert('Sorry there was an error. Try again!');
-                    });
+                    const name = this.input.value;
+                    const cb = () => { this.input.value = ''; };
+
+                    this.props.store.dispatch(handleAddGoal(name, cb))
                 } 
 
                 removeItem = (goal) => {
