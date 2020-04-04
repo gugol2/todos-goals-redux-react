@@ -126,6 +126,17 @@
                 }
             }
 
+            const handleReceiveData = () => {
+                return (dispatch) => {
+                    return Promise.all([
+                        API.fetchTodos(), 
+                        API.fetchGoals()
+                    ]).then(([todos, goals]) => {
+                        dispatch(receiveDataAction(todos, goals));
+                    });
+                }
+            }
+
             // REDUCERS
             function todos (state = [], action) {
                 switch(action.type) {
@@ -310,12 +321,7 @@
 
                     store.subscribe(() => this.forceUpdate());
 
-                    const todosPromise = API.fetchTodos();
-                    const goalsPromise = API.fetchGoals();
-
-                    Promise.all([todosPromise, goalsPromise]).then(([todos, goals]) => {
-                        store.dispatch(receiveDataAction(todos, goals));
-                    });
+                    store.dispatch(handleReceiveData());
                 }
 
                 render () {
