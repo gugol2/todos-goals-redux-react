@@ -71,6 +71,17 @@
                 }
             }
 
+            const handleToggleTodo = (id) => {
+                return (dispatch) => {
+                    dispatch(toggleTodoAction(id));
+
+                    return API.saveTodoToggle(id).then(() => {
+                        alert(`Toggling of todo failed. Try again!!`);
+                        dispatch(toggleTodoAction(id));
+                    });
+                }
+            }
+
             function addGoalAction (goal) {
                 return {
                     type: ADD_GOAL,
@@ -232,12 +243,7 @@
                 }
 
                 toggleItem = (id) => {
-                    this.props.store.dispatch(toggleTodoAction(id));
-
-                    return API.saveTodoToggle(id).then(() => {
-                        alert(`Toggling of todo failed. Try again!!`);
-                        this.props.store.dispatch(toggleTodoAction(id));
-                    });
+                    this.props.store.dispatch(handleToggleTodo(id));
                 }
 
                 render() {
