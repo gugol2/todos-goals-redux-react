@@ -75,7 +75,7 @@
                 return (dispatch) => {
                     dispatch(toggleTodoAction(id));
 
-                    return API.saveTodoToggle(id).then(() => {
+                    return API.saveTodoToggle(id).catch(() => {
                         alert(`Toggling of todo failed. Try again!!`);
                         dispatch(toggleTodoAction(id));
                     });
@@ -327,7 +327,7 @@
                 render () {
                     const { store } = this.props;
                     const { todos, goals, loading } = store.getState();
-                    
+
                     if (loading) {
                         return <h3>Loading...</h3>
                     }
