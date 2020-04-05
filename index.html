@@ -10,6 +10,7 @@
         <!-- Remote API as DB -->
         <script src="https://gugol2.github.io/todos-goals-api/index.js"></script>
         <script src="https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js"></script>
+        <script src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js"></script>
     </head>
     <body>
         <div id="app"></div>
@@ -335,74 +336,22 @@
             }
 
             // Connected Components
-            const Context = React.createContext();
-
-            const connect = (mapStateToProps) => {
-                return (Component) => {
-                    class Receiver extends React.Component {
-                        componentDidMount () {
-                            const { subscribe } = this.props.store;
-
-                            this.unsubscribe = subscribe(() => this.forceUpdate());
-                        }
-
-                        componentWillUnmount () {
-                            this.unsubscribe();
-                        }
-
-                        render() {
-                            const { getState, dispatch } = this.props.store;
-                            const state = getState();
-                            const stateNeeded = mapStateToProps(state);
-
-                            return (
-                                <Component {...stateNeeded} dispatch={dispatch} />
-                            )
-                        }
-                    }
-
-                    class ConnectedComponent extends React.Component {
-                        render () {
-                            return (
-                                <Context.Consumer>
-                                    {(store) => (
-                                        <Receiver store={store} />
-                                    )}
-                                </Context.Consumer>
-                            )
-                        }
-                    }
-
-                    return ConnectedComponent;
-                }
-            }
-
-            const ConnectedApp = connect(
+            const ConnectedApp = ReactRedux.connect(
                 (state) => ({ loading: state.loading })
             )(App);
 
-            const ConnectedTodos = connect(
+            const ConnectedTodos = ReactRedux.connect(
                 (state) => ({ todos: state.todos })
             )(Todos);
 
-            const ConnectedGoals = connect(
+            const ConnectedGoals = ReactRedux.connect(
                 (state) => ({ goals: state.goals })
             )(Goals);
 
-            class Provider extends React.Component {
-                render () {
-                    return (
-                        <Context.Provider value={this.props.store}>
-                            {this.props.children}
-                        </Context.Provider>
-                    )
-                }
-            }
-
             ReactDOM.render(
-                <Provider store={store}>
+                <ReactRedux.Provider store={store}>
                     <ConnectedApp/>
-                </Provider>,
+                </ReactRedux.Provider>,
                 document.getElementById('app')
             );
 
