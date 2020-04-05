@@ -337,15 +337,13 @@
             // Connected Components
             const Context = React.createContext();
 
-            const connect = (mapdStateToProps) => {
+            const connect = (mapStateToProps) => {
                 return (Component) => {
                     class Receiver extends React.Component {
                         componentDidMount () {
                             const { subscribe } = this.props.store;
 
-                            this.unsubscribe = subscribe(
-                                () => this.forceUpdate()
-                            );
+                            this.unsubscribe = subscribe(() => this.forceUpdate());
                         }
 
                         componentWillUnmount () {
@@ -355,7 +353,7 @@
                         render() {
                             const { getState, dispatch } = this.props.store;
                             const state = getState();
-                            const stateNeeded = mapdStateToProps(state);
+                            const stateNeeded = mapStateToProps(state);
 
                             return (
                                 <Component {...stateNeeded} dispatch={dispatch} />
