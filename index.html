@@ -317,11 +317,11 @@
 
             class App extends React.Component {
                 componentDidMount () {
-                    const { store } = this.props;
+                    // const { store } = this.props;
 
                     // store.subscribe(() => this.forceUpdate());
 
-                    dispatch(handleReceiveData());
+                    this.props.dispatch(handleReceiveData());
                 }
 
                 render () {
@@ -343,6 +343,48 @@
 
             // Connected Components
             const Context = React.createContext();
+
+            const connect = (mapdStateToProps) => {
+                return (Component) => {
+                    class Receiver extends React.Component {
+                        componentDidMount () {
+                            const { subscribe } = this.props.store;
+
+                            this.unsubscribe = subscribe(
+                                () => this.forceUpdate()
+                            );
+                        }
+
+                        componentWillUnmount () {
+                            this.unsubscribe();
+                        }
+
+                        render() {
+                            const { getState, dispatch } = this.props.store;
+                            const state = getState();
+                            const stateNeeded = mapdStateToProps(state);
+
+                            return (
+                                <Component {...stateNeeded} dispatch={dispatch} />
+                            )
+                        }
+                    }
+
+                    class ConnectedComponent extends React.Component {
+                        render () {
+                            return (
+                                <Context.Consumer>
+                                    {(store) => (
+                                        <Receiver store={store} />
+                                    )}
+                                </Context.Consumer>
+                            )
+                        }
+                    }
+
+                    return ConnectedComponent;
+                }
+            }
 
             // class ConnectedApp extends React.Component {
             //     render () {
